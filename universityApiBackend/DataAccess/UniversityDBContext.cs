@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using universityApiBackend.Models.DataModels;
 
 namespace universityApiBackend.DataAccess
 {
@@ -12,5 +12,6 @@ namespace universityApiBackend.DataAccess
         }
 
         // TODO: Add DbSets (The tables of data base)
+        public DbSet<User>? Users { get; set; }
     }
 }
