@@ -1,5 +1,6 @@
-// 1- usings to work wu=ith Entity framework
+// 1- usings to work with Entity framework
 using Microsoft.EntityFrameworkCore;
+using universityApiBackend;
 using universityApiBackend.DataAccess;
 using universityApiBackend.Services;
 
@@ -13,7 +14,8 @@ var connectionString = builder.Configuration.GetConnectionString(CONNECTIONNAME)
 // 3 - Add context to server
 builder.Services.AddDbContext<UniversityDBContext>(options => options.UseSqlServer(connectionString));
 
-
+//7 - Add service of JWT Authentication
+builder.Services.AddJwtTokenServices(builder.Configuration);
 
 
 // Add services to the container.
@@ -27,6 +29,7 @@ builder.Services.AddScoped<IStudentsService, StudentService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+// 8 - TODO: Config Swagger to take in acount the athozisation
 builder.Services.AddSwaggerGen();
 
 // 5 - CORS Configuration
