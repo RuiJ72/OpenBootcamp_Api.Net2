@@ -249,25 +249,271 @@
             var takeWhileSmallerThan4 = myList.TakeWhile(num => num < 4);
         }
 
-        // Variables
+        // Paging with Skip & Take
+        static public IEnumerable<T> GetPage<T>(IEnumerable<T> collection, int pageNumber, int resultsPerPage)
+        {
+            int startIndex = (pageNumber - 1) * resultsPerPage;
+            return collection.Skip(startIndex).Take(resultsPerPage);
 
+        }
+
+        // Variables
+        static public void LinqVariables()
+        {
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            var aboveAverage = from number in numbers
+                               let average = numbers.Average()
+                               let nSquare = Math.Pow(number, 2)
+                               where nSquare > average
+                               select number;
+
+            Console.WriteLine("Average: {0}", numbers.Average());
+
+            foreach (int number in aboveAverage)
+            {
+                Console.WriteLine("Query: Number: {0} Square: {1} ", number, Math.Pow(number, 2));
+            }
+        }
 
         // ZIP
+        static public void ZipLinq()
+        {
+
+            int[] numbers = { 1, 2, 3, 4, 5, };
+            string[] stringNumbers = { "one", "two, three", "four", "five" };
+
+            IEnumerable<string> zipNumbers = numbers.Zip(stringNumbers, (number, word) =>
+            number + "=" + word); // Iteration between de elementa of both lists
 
 
-        // Repeat
+        }
+        
+        // Repeat & Range
+        static public void repeatRangeLinq()
+        {
+            // To generate a collection of values from 1 to 1000
+            IEnumerable<int> first1000 = Enumerable.Range(1, 1000);
 
+            // Repeat a value N times
+            IEnumerable<string> fiveXs = Enumerable.Repeat("X", 5);
 
+        }
+
+        static public void studentsLinq()
+        {
+            var classRoom = new[]
+            {
+                new Student
+                {
+                    Id = 1,
+                    Name = "Rui",
+                    Grade = 90,
+                    Certified = true
+                },
+                 new Student
+                {
+                    Id = 2,
+                    Name = "Mary",
+                    Grade = 50,
+                    Certified = false
+                },
+                  new Student
+                {
+                    Id = 3,
+                    Name = "Carlos",
+                    Grade = 96,
+                    Certified = true
+                },
+                   new Student
+                {
+                    Id = 4,
+                    Name = "José",
+                    Grade = 10,
+                    Certified = false
+                },
+                    new Student
+                {
+                    Id = 5,
+                    Name = "Peter",
+                    Grade = 50,
+                    Certified = true
+                }
+            };
+
+            var certifiedStudents = from student in classRoom
+                                    where student.Certified
+                                    select student;
+
+            var notCertifiedStudents = from student in classRoom
+                                       where student.Certified == false
+                                       select student;
+
+            var aprovedStudentsNames = from student in classRoom
+                                  where student.Grade >= 50 && student.Certified == true
+                                  select student.Name;
+        }
         // ALL
+        static public void AllLinq()
+        {
+            var numbers = new List<int>() { 1, 2, 3, 4, 5 };
+            bool allAreSmallerThan10 = numbers.All(x => x < 10);// True
+            bool allAreBiggerOrEqualThan2 = numbers.All(x => x >= 2); // False
 
+            var emptyList = new List<int>();
 
+            bool allNumbersAreGreaterThan0 = numbers.All(x => x >= 0); // True
+
+        }
         // Aggregate
+        static public void aggregateQueries()
+        {
+            // Cummulative agregation of functions
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            // Sum all numbers
+            int sum = numbers.Aggregate((prevSum, current) => prevSum + current);
 
 
+            string[] words = { "hello", "my", "name", "is", "Rui" };
+            string greeting = words.Aggregate((prevGreeting, current) => prevGreeting + current);
+        }
         // Distinct
+        static public void distinctValues()
+        {
+            int[] numbers = { 1, 2, 3, 4, 5, 5, 4, 3, 2, 1 };
 
-
+            IEnumerable<int> distinctValues = numbers.Distinct(); 
+        }
         // GroupBy
+        static public void groupByExample()
+        {
+            List<int> numbers = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            // Obtain only even numbers and generate two groups
+
+            var grouped = numbers.GroupBy(x => x % 2 == 0);
+
+            foreach (var group in grouped)
+            {
+                foreach (var value in group)
+                {
+                    Console.WriteLine(value); // First the odd and than the even
+                }
+            }
+
+            // Another example
+
+            var classRoom = new[]
+           {
+                new Student
+                {
+                    Id = 1,
+                    Name = "Rui",
+                    Grade = 90,
+                    Certified = true
+                },
+                 new Student
+                {
+                    Id = 2,
+                    Name = "Mary",
+                    Grade = 50,
+                    Certified = false
+                },
+                  new Student
+                {
+                    Id = 3,
+                    Name = "Carlos",
+                    Grade = 96,
+                    Certified = true
+                },
+                   new Student
+                {
+                    Id = 4,
+                    Name = "José",
+                    Grade = 10,
+                    Certified = false
+                },
+                    new Student
+                {
+                    Id = 5,
+                    Name = "Peter",
+                    Grade = 50,
+                    Certified = true
+                }
+            };
+
+            var certifiedQuery = classRoom.GroupBy(student => student.Certified);
+
+            // We will obtain two groups, the certified and than the no certified
+            
+            foreach (var group in certifiedQuery)
+            {
+                Console.WriteLine("---------------- {0} -----------", group.Key);
+                foreach (var student in group)
+                {
+                    Console.WriteLine(student.Name); 
+                }
+            }
+        }
+
+        static public void relationsLinq()
+        {
+            List<Post> posts = new List<Post>()
+            {
+                new Post()
+                {
+                    Id = 1,
+                    Title = "My first post",
+                    Content = "My first content",
+                    Comments = new List<Comment>()
+                    {
+                        new Comment()
+                        {
+                            Id = 1,
+                            Created = DateTime.Now,
+                            Title = "My first comment",
+                            Content = "My content"
+                        },
+                          new Comment()
+                        {
+                            Id = 2,
+                            Created = DateTime.Now,
+                            Title = "My second comment",
+                            Content = "My second content"
+                        }
+                    }
+                },
+                   new Post()
+                {
+                    Id = 2,
+                    Title = "My second post",
+                    Content = "My other content",
+                    Comments = new List<Comment>()
+                    {
+                        new Comment()
+                        {
+                            Id = 3,
+                            Created = DateTime.Now,
+                            Title = "My second comment",
+                            Content = "My other content"
+                        },
+                          new Comment()
+                        {
+                            Id = 4,
+                            Created = DateTime.Now,
+                            Title = "My other comment",
+                            Content = "My second content"
+                        }
+                    }
+                }
+            };
+
+            var commentsWithContent = posts.SelectMany(post => 
+            post.Comments, (post, comment) =>
+            new { PostId = post.Id, CommentContent = comment.Content});
+
+        }
 
 
     }
